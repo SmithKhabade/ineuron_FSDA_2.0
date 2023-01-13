@@ -1,0 +1,173 @@
+SHOW WAREHOUSES;
+USE WAREHOUSE PRACTICE_WAREHOUSE;
+
+CREATE DATABASE PRACTICE_DATABASE;
+
+-------------------TASK 1-------------------
+
+CREATE OR REPLACE TABLE SHOPPING_HISTORY
+(
+    PRODUCT VARCHAR(30) NOT NULL,
+    QUANTITY INTEGER NOT NULL,
+    UNIT_PRICE INTEGER NOT NULL
+);
+
+INSERT INTO SHOPPING_HISTORY
+VALUES  ('APPLE', 2 , 100),
+        ('BANANAS' , 1 , 50),
+        ('Bread' , 1 , 20),
+        ('Milk' , 2 , 25),
+        ('Eggs' , 12 , 6);
+        
+SELECT * FROM SHOPPING_HISTORY;
+        
+ALTER TABLE SHOPPING_HISTORY
+ADD COLUMN TOTAL_PRICE INTEGER;
+
+UPDATE SHOPPING_HISTORY
+SET TOTAL_PRICE = (QUANTITY * UNIT_PRICE);
+
+SELECT PRODUCT , TOTAL_PRICE FROM SHOPPING_HISTORY  
+ORDER BY PRODUCT DESC;
+
+
+-------------------TASK 2.1-------------------
+
+CREATE OR REPLACE TABLE PHONES
+(   NAME VARCHAR(20) NOT NULL UNIQUE,
+    PHONE_NUMBER INTEGER NOT NULL UNIQUE
+);
+
+INSERT INTO PHONES (NAME , PHONE_NUMBER)
+VALUES  ('JACK' , 1234),
+        ('LENA' , 3333),
+        ('MARK' , 9999),
+        ('ANNA' , 7582);
+
+
+CREATE OR REPLACE TABLE CALLS
+    (ID INTEGER NOT NULL,
+    CALLER INTEGER NOT NULL,
+    CALLEE INTEGER NOT NULL,
+    DURATION INTEGER NOT NULL,
+    UNIQUE(ID));
+    
+
+INSERT INTO CALLS (ID, CALLER, CALLEE, DURATION)
+VALUES  (25 , 1234 , 7582, 8),
+        (7 , 9999 , 7582 , 1),
+        (18 , 9999 , 3333 , 4),
+        (2 , 7582 , 3333 , 3),
+        (3 , 3333 , 1234 , 1),
+        (21 , 3333 , 1234 , 1);
+
+SELECT p.NAME
+FROM PHONES p
+JOIN CALLS c ON p.PHONE_NUMBER = c.CALLER OR p.PHONE_NUMBER = c.CALLEE
+GROUP BY p.NAME
+HAVING SUM(c.DURATION) >= 10
+ORDER BY p.NAME ASC;
+
+-------------------TASK 2.2-------------------
+
+CREATE OR REPLACE TABLE PHONES_2
+(   NAME VARCHAR(20) NOT NULL UNIQUE,
+    PHONE_NUMBER INTEGER NOT NULL UNIQUE
+);
+
+INSERT INTO PHONES_2 ( NAME , PHONE_NUMBER)
+VALUES  ( 'JOHN' , 6356),
+        ( 'ADDISON' , 4315),
+        ( 'KATE' , 8003),
+        ( 'GINNY' , 9831);
+        
+CREATE OR REPLACE TABLE CALLS_2
+    (ID INTEGER NOT NULL,
+    CALLER INTEGER NOT NULL,
+    CALLEE INTEGER NOT NULL,
+    DURATION INTEGER NOT NULL,
+    UNIQUE(ID));
+
+INSERT INTO CALLS_2 ( ID , CALLER , CALLEE , DURATION )
+VALUES  ( 65 , 8003 , 9831 , 7),
+        ( 100 , 9831 , 8003 , 3),
+        ( 145 , 4315 , 9831 , 18);
+        
+SELECT p.NAME
+FROM PHONES_2 p
+JOIN CALLS_2 c ON p.PHONE_NUMBER = c.CALLER OR p.PHONE_NUMBER = c.CALLEE
+GROUP BY p.NAME
+HAVING SUM(c.DURATION) >= 10
+ORDER BY p.NAME ASC;
+
+-------------------TASK 3.1-------------------
+
+create or replace table transactions 
+(amount integer not null,
+date DATE NOT NULL);
+
+Insert into transactions (amount , date)
+Values  (1000, '2020-01-06'),
+        (-10, '2020-01-14'),
+        (-75, '2020-01-20'),
+        (-5, '2020-01-25'),
+        (-4, '2020-01-29'),
+        (2000, '2020-03-10'),
+        (-75, '2020-03-12'),
+        (-20, '2020-03-15'),
+        (40, '2020-03-15'),
+        (-50, '2020-03-17'),
+        (200, '2020-10-10'),
+        (-200, '2020-10-10');
+
+select * from transactions;
+
+SELECT SUM(amount) as final_balance
+FROM transactions;
+
+SELECT SUM(amount) - (11*5) as balance
+FROM transactions;
+
+-------------------TASK 3.2-------------------
+
+create or replace table transactions2 
+(amount integer not null,
+date DATE NOT NULL);
+
+Insert into transactions2 (amount , date)
+Values  (1, '2020-06-29'),
+        (35, '2020-02-22'),
+        (-50, '2020-02-03'),
+        (-1, '2020-02-26'),
+        (-200, '2020-08-01'),
+        (-44, '2020-02-07'),
+        (-5, '2020-02-25'),
+        (1, '2020-06-29'),
+        (1, '2020-06-29'),
+        (-100, '2020-12-29'),
+        (-100, '2020-12-30'),
+        (-100, '2020-12-31');
+        
+Select sum(amount) as final_balance
+from transactions2;
+
+Select sum(amount) - (10*5) as balance
+from transactions2;
+
+-------------------TASK 3.3-------------------
+
+create or replace table transactions3 
+(amount integer not null,
+date DATE NOT NULL);
+
+Insert into transactions3 (amount , date)
+Values  (6000, '2020-04-03'),
+        (5000, '2020-04-02'),
+        (4000, '2020-04-01'),
+        (3000, '2020-03-01'),
+        (2000, '2020-02-01'),
+        (1000, '2020-01-01');
+        
+select sum(amount) as final_balance from transactions3;
+
+Select sum(amount) - (12*5) as balance from transactions3;
